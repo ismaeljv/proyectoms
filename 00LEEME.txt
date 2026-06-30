@@ -1,0 +1,15 @@
+comprobar url en 01wscraping.py y ejecutar: genera quiniela_pronosticos.xlsx
+	Arreglar scraping y copiar a quiniela_pronosticos_base.xlsx
+	En quiniela_pronosticos_base.xlsx:
+		Q1 -> nº de apuestas a sacar
+		R2:U15 -> ajustar para que sumen el valor de Q1
+		RESULTADOS para el 02dameSeleccionadas.py:
+			Apuesta base en L18
+			Array de restricciones -> B19:B32
+
+Ajustar parámetros en 02dameSeleccionadas.py:
+	NUM_APUESTAS: Mismo en en Q1 de excel
+	DISTANCIA_MIN y DISTANCIA_MAX
+	base y restricciones de la excel
+
+

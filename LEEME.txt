@@ -1,2 +1,0 @@
-Primer archivo del proyecto.
-Hacer add y commit para guardarlo.
