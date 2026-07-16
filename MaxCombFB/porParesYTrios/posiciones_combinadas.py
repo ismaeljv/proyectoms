@@ -45,7 +45,7 @@ def elimina_elementos(linea, lista, num_coincidencias):
 
 
 todas6 = list(combinations(range(14), 6))
-
+print("Elementos de todas6: " , len(todas6))
 trios_usados6 = set()
 seleccionadas6 = []
 

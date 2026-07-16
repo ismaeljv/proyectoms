@@ -8,9 +8,26 @@ file_path = f"salida{DISTANCIA}.txt"
 ruta = Path(f"{file_path}")
 
 # combinación base (puedes cambiarla)
-base = ['1','1','1','1','1','1','1','1','1','1','1','1','1','1']
+base = ['1','1','2','1','1','1','1','2','1','1','1','2','1','1']
 
 signos = ['1','X','2']
+
+cuartetos_vistos = set()
+
+def guardar_cuartetos(linea):
+    return True
+    indices_1 = [i for i, val in enumerate(linea) if val == '1']
+    nuevos_cuartetos = [(i, j, k, l, m, n) for i, j, k, l, m, n in combinations(indices_1, 6)]
+    if len(set(nuevos_cuartetos) & set(cuartetos_vistos)) == 0:
+        cuartetos_vistos.update(nuevos_cuartetos)
+        return True
+    return False
+
+def borrar_cuartetos(linea):
+    return True
+    indices_1 = [i for i, val in enumerate(linea) if val == '1']
+    nuevos_cuartetos = [(i, j, k, l, m, n) for i, j, k, l, m, n in combinations(indices_1, 6)]
+    cuartetos_vistos.difference_update(nuevos_cuartetos)
 
 # genera combinaciones a distancia EXACTA d
 def generar_distancia(base, d):
@@ -99,7 +116,7 @@ lineas20 = []
 lineas21 = []
 lineas22 = []
 seleccionadas = []
-trios = []
+
 while lineas:
     indice = random.randrange(len(lineas))
     linea1 = parsear(lineas[indice])
@@ -108,13 +125,22 @@ while lineas:
 
     for linea2 in lineas:
         candidato = parsear(linea2)
-        if distancia(candidato, linea1) == DISTANCIA:
+        if distancia(candidato, linea1) == DISTANCIA and guardar_cuartetos(candidato):
             lineas2.append(candidato)
     
     if maximo < 1:
         maximo = 1
     # print("lineas de lineas2:", len(lineas2))
     print("num lineas2:", len(lineas2), "num lineas1:", len(lineas))
+    
+    """for i, a in enumerate(cuartetos_vistos):
+        print(f"{i}: {a}")
+    for i, a in enumerate(lineas2):
+        print(f"{i}: {a}")
+    for i, a in enumerate(seleccionadas):
+        print(f"{i}: {a}")
+        """
+    # exit(0)
     while lineas2:
         #linea2 = lineas2[0]
         indice = random.randrange(len(lineas2))
@@ -122,7 +148,7 @@ while lineas:
         seleccionadas.append(" ".join(linea2))
         for candidato in lineas2:
             # candidato = parsear(linea3)
-            if distancia(candidato, linea2) == DISTANCIA:
+            if distancia(candidato, linea2) == DISTANCIA and guardar_cuartetos(candidato):
                 lineas3.append(candidato)
         if maximo < 2:
             maximo = 2
@@ -133,7 +159,7 @@ while lineas:
             seleccionadas.append(" ".join(linea3))
             for candidato in lineas3:
                 # candidato = parsear(linea4)
-                if distancia(candidato, linea3) == DISTANCIA:
+                if distancia(candidato, linea3) == DISTANCIA and guardar_cuartetos(candidato):
                     lineas4.append(candidato)
             if maximo < 3:
                 maximo = 3
@@ -144,7 +170,7 @@ while lineas:
                 seleccionadas.append(" ".join(linea4))
                 for candidato in lineas4:
                     # candidato = parsear(linea5)
-                    if distancia(candidato, linea4) == DISTANCIA:
+                    if distancia(candidato, linea4) == DISTANCIA and guardar_cuartetos(candidato):
                         lineas5.append(candidato)
                 if maximo < 4:
                     maximo = 4
@@ -154,7 +180,7 @@ while lineas:
                     seleccionadas.append(" ".join(linea5))
                     for candidato in lineas5:
                         #candidato = parsear(linea6)
-                        if distancia(candidato, linea5) == DISTANCIA:
+                        if distancia(candidato, linea5) == DISTANCIA and guardar_cuartetos(candidato):
                             lineas6.append(candidato)
                     if maximo < 5:
                         maximo = 5
@@ -164,7 +190,7 @@ while lineas:
                         seleccionadas.append(" ".join(linea6))
                         for candidato in lineas6:
                             # candidato = parsear(linea7)
-                            if distancia(candidato, linea6) == DISTANCIA:
+                            if distancia(candidato, linea6) == DISTANCIA and guardar_cuartetos(candidato):
                                 lineas7.append(candidato)
                         if maximo < 6:
                             maximo = 6
@@ -174,7 +200,7 @@ while lineas:
                             seleccionadas.append(" ".join(linea7))
                             for candidato in lineas7:
                                 # candidato = parsear(linea8)
-                                if distancia(candidato, linea7) == DISTANCIA:
+                                if distancia(candidato, linea7) == DISTANCIA and guardar_cuartetos(candidato):
                                     lineas8.append(candidato)
                             if maximo < 7:
                                 maximo = 7
@@ -184,7 +210,7 @@ while lineas:
                                 seleccionadas.append(" ".join(linea8))
                                 for candidato in lineas8:
                                     # candidato = parsear(linea9)
-                                    if distancia(candidato, linea8) == DISTANCIA:
+                                    if distancia(candidato, linea8) == DISTANCIA and guardar_cuartetos(candidato):
                                         lineas9.append(candidato)
                                 if maximo < 8:
                                     maximo = 8
@@ -194,7 +220,7 @@ while lineas:
                                     seleccionadas.append(" ".join(linea9))
                                     for candidato in lineas9:
                                         # candidato = parsear(linea10)
-                                        if distancia(candidato, linea9) == DISTANCIA:
+                                        if distancia(candidato, linea9) == DISTANCIA and guardar_cuartetos(candidato):
                                             lineas10.append(candidato)
                                     if maximo < 9:
                                         maximo = 9
@@ -204,7 +230,7 @@ while lineas:
                                         seleccionadas.append(" ".join(linea10))
                                         for candidato in lineas10:
                                             # candidato = parsear(linea11)
-                                            if distancia(candidato, linea10) == DISTANCIA:
+                                            if distancia(candidato, linea10) == DISTANCIA and guardar_cuartetos(candidato):
                                                 lineas11.append(candidato)
                                         if maximo < 10:
                                             maximo = 10
@@ -214,7 +240,7 @@ while lineas:
                                             seleccionadas.append(" ".join(linea11))
                                             for candidato in lineas11:
                                                 # candidato = parsear(linea12)
-                                                if distancia(candidato, linea11) == DISTANCIA:
+                                                if distancia(candidato, linea11) == DISTANCIA and guardar_cuartetos(candidato):
                                                     lineas12.append(candidato)
                                             if maximo < 11:
                                                 maximo = 11
@@ -224,7 +250,7 @@ while lineas:
                                                 seleccionadas.append(" ".join(linea12))
                                                 for candidato in lineas12:
                                                     # candidato = parsear(linea13)
-                                                    if distancia(candidato, linea12) == DISTANCIA:
+                                                    if distancia(candidato, linea12) == DISTANCIA and guardar_cuartetos(candidato):
                                                         lineas13.append(candidato)
                                                 if maximo < 12:
                                                     maximo = 12
@@ -234,7 +260,7 @@ while lineas:
                                                     seleccionadas.append(" ".join(linea13))
                                                     for candidato in lineas13:
                                                         # candidato = parsear(linea14)
-                                                        if distancia(candidato, linea13) == DISTANCIA:
+                                                        if distancia(candidato, linea13) == DISTANCIA and guardar_cuartetos(candidato):
                                                             lineas14.append(candidato)
                                                     if maximo < 13:
                                                         maximo = 13
@@ -244,7 +270,7 @@ while lineas:
                                                         seleccionadas.append(" ".join(linea14))
                                                         for candidato in lineas14:
                                                             # candidato = parsear(linea15)
-                                                            if distancia(candidato, linea14) == DISTANCIA:
+                                                            if distancia(candidato, linea14) == DISTANCIA and guardar_cuartetos(candidato):
                                                                 lineas15.append(candidato)
                                                         if maximo < 14:
                                                             maximo = 14
@@ -254,7 +280,7 @@ while lineas:
                                                             seleccionadas.append(" ".join(linea15))
                                                             for candidato in lineas15:
                                                                 # candidato = parsear(linea16)
-                                                                if distancia(candidato, linea15) == DISTANCIA:
+                                                                if distancia(candidato, linea15) == DISTANCIA and guardar_cuartetos(candidato):
                                                                     lineas16.append(candidato)
                                                             if maximo < 15:
                                                                 maximo = 15
@@ -264,7 +290,7 @@ while lineas:
                                                                 seleccionadas.append(" ".join(linea16))
                                                                 for candidato in lineas16:
                                                                     # candidato = parsear(linea17)
-                                                                    if distancia(candidato, linea16) == DISTANCIA:
+                                                                    if distancia(candidato, linea16) == DISTANCIA and guardar_cuartetos(candidato):
                                                                         lineas17.append(candidato)
                                                                 if maximo < 16:
                                                                     maximo = 16
@@ -274,7 +300,7 @@ while lineas:
                                                                     seleccionadas.append(" ".join(linea17))
                                                                     for candidato in lineas17:
                                                                         # candidato = parsear(linea18)
-                                                                        if distancia(candidato, linea17) == DISTANCIA:
+                                                                        if distancia(candidato, linea17) == DISTANCIA and guardar_cuartetos(candidato):
                                                                             lineas18.append(candidato)
                                                                     if maximo < 17:
                                                                         maximo = 17
@@ -284,7 +310,7 @@ while lineas:
                                                                         seleccionadas.append(" ".join(linea18))
                                                                         for candidato in lineas18:
                                                                             # candidato = parsear(linea19)
-                                                                            if distancia(candidato, linea18) == DISTANCIA:
+                                                                            if distancia(candidato, linea18) == DISTANCIA and guardar_cuartetos(candidato):
                                                                                 lineas19.append(candidato)
                                                                         if maximo < 18:
                                                                             maximo = 18
@@ -294,7 +320,7 @@ while lineas:
                                                                             seleccionadas.append(" ".join(linea19))
                                                                             for candidato in lineas19:
                                                                                 # candidato = parsear(linea20)
-                                                                                if distancia(candidato, linea19) == DISTANCIA:
+                                                                                if distancia(candidato, linea19) == DISTANCIA and guardar_cuartetos(candidato):
                                                                                     lineas20.append(candidato)
                                                                             if maximo < 19:
                                                                                 maximo = 19
@@ -304,7 +330,7 @@ while lineas:
                                                                                 seleccionadas.append(" ".join(linea20))
                                                                                 for candidato in lineas20:
                                                                                     # candidato = parsear(linea21)
-                                                                                    if distancia(candidato, linea20) == DISTANCIA:
+                                                                                    if distancia(candidato, linea20) == DISTANCIA and guardar_cuartetos(candidato):
                                                                                         lineas21.append(candidato)
                                                                                 if maximo < 20:
                                                                                     maximo = 20
@@ -313,134 +339,134 @@ while lineas:
                                                                                     ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                                     guardar_lista(ruta_salida, seleccionadas)
                                                                                 del lineas20[0]
-                                                                                seleccionadas.pop()
+                                                                                borrar_cuartetos(seleccionadas.pop())
 
 
                                                                             if maximo == 19:
                                                                                 ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                                 guardar_lista(ruta_salida, seleccionadas)
                                                                             del lineas19[0]
-                                                                            seleccionadas.pop()
+                                                                            borrar_cuartetos(seleccionadas.pop())
 
 
                                                                         if maximo == 18:
                                                                             ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                             guardar_lista(ruta_salida, seleccionadas)
                                                                         del lineas18[0]
-                                                                        seleccionadas.pop()
+                                                                        borrar_cuartetos(seleccionadas.pop())
 
 
                                                                     if maximo == 17:
                                                                         ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                         guardar_lista(ruta_salida, seleccionadas)
                                                                     del lineas17[0]
-                                                                    seleccionadas.pop()
+                                                                    borrar_cuartetos(seleccionadas.pop())
 
 
                                                                 if maximo == 16:
                                                                     ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                     guardar_lista(ruta_salida, seleccionadas)
                                                                 del lineas16[0]
-                                                                seleccionadas.pop()
+                                                                borrar_cuartetos(seleccionadas.pop())
 
 
                                                             if maximo == 15:
                                                                 ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                                 guardar_lista(ruta_salida, seleccionadas)
                                                             del lineas15[0]
-                                                            seleccionadas.pop()
+                                                            borrar_cuartetos(seleccionadas.pop())
 
 
                                                         if maximo == 14:
                                                             ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                             guardar_lista(ruta_salida, seleccionadas)
                                                         del lineas14[0]
-                                                        seleccionadas.pop()
+                                                        borrar_cuartetos(seleccionadas.pop())
 
 
                                                     if maximo == 13:
                                                         ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                         guardar_lista(ruta_salida, seleccionadas)
                                                     del lineas13[0]
-                                                    seleccionadas.pop()
+                                                    borrar_cuartetos(seleccionadas.pop())
 
                                                 if maximo == 12:
                                                     ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                     guardar_lista(ruta_salida, seleccionadas)
                                                 del lineas12[0]
-                                                seleccionadas.pop()
+                                                borrar_cuartetos(seleccionadas.pop())
 
 
                                             if maximo == 11:
                                                 ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                                 guardar_lista(ruta_salida, seleccionadas)
                                             del lineas11[0]
-                                            seleccionadas.pop()
+                                            borrar_cuartetos(seleccionadas.pop())
 
 
                                         if maximo == 10:
                                             ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                             guardar_lista(ruta_salida, seleccionadas)
                                         del lineas10[0]
-                                        seleccionadas.pop()
+                                        borrar_cuartetos(seleccionadas.pop())
 
 
                                     if maximo == 9:
                                         ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                         guardar_lista(ruta_salida, seleccionadas)
                                     del lineas9[0]
-                                    seleccionadas.pop()
+                                    borrar_cuartetos(seleccionadas.pop())
 
 
                                 if maximo == 8:
                                     ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                     guardar_lista(ruta_salida, seleccionadas)
                                 del lineas8[0]
-                                seleccionadas.pop()
+                                borrar_cuartetos(seleccionadas.pop())
 
                             
                             if maximo == 7:
                                 ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                                 guardar_lista(ruta_salida, seleccionadas)
                             del lineas7[0]
-                            seleccionadas.pop()
+                            borrar_cuartetos(seleccionadas.pop())
 
 
                         if maximo == 6:
                             ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                             guardar_lista(ruta_salida, seleccionadas)
                         del lineas6[0]
-                        seleccionadas.pop()
+                        borrar_cuartetos(seleccionadas.pop())
 
 
                     if maximo == 5:
                         ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                         guardar_lista(ruta_salida, seleccionadas)
                     del lineas5[0]
-                    seleccionadas.pop()
+                    borrar_cuartetos(seleccionadas.pop())
 
 
                 if maximo == 4:
                     ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                     guardar_lista(ruta_salida, seleccionadas)
                 del lineas4[0]
-                seleccionadas.pop()
+                borrar_cuartetos(seleccionadas.pop())
 
             if maximo == 3:
                 ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
                 guardar_lista(ruta_salida, seleccionadas)
             del lineas3[0]
-            seleccionadas.pop()
+            borrar_cuartetos(seleccionadas.pop())
 
         if maximo == 2:
             ruta_salida = Path(f"seleccionadas{DISTANCIA}_{maximo}.txt")
             guardar_lista(ruta_salida, seleccionadas)
         del lineas2[0]
-        seleccionadas.pop()
+        borrar_cuartetos(seleccionadas.pop())
 
     # Eliminar la línea elegida
     del lineas[indice]
-    seleccionadas.pop()
+    borrar_cuartetos(seleccionadas.pop())
     exit(0)  # Salir después de la primera iteración para probar
 
     # Actualizar el fichero
