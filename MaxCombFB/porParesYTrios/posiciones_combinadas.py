@@ -43,7 +43,7 @@ def elimina_elementos(linea, lista, num_coincidencias):
 #    for c in combinations(range(14), 6):
 #        f.write(" ".join(map(str, c)) + "\n")
 
-
+"""
 todas6 = list(combinations(range(14), 6))
 print("Elementos de todas6: " , len(todas6))
 trios_usados6 = set()
@@ -59,19 +59,36 @@ for comb6 in todas6:
 
 print(seleccionadas6)
 print()
-
+"""
 
 todas7 = list(combinations(range(14), 7))
-
-trios_usados7 = set()
+print("Elementos de todas7: " , len(todas7))
+grupo1_usados = set()
 seleccionadas7 = []
 
 for comb7 in todas7:
 
-    trios7 = set(combinations(comb7, 4))
+    grupo1 = set(combinations(comb7, 1))
 
-    if trios7.isdisjoint(trios_usados7):
+    if grupo1.isdisjoint(grupo1_usados):
         seleccionadas7.append(comb7)
-        trios_usados7.update(trios7)
+        grupo1_usados.update(grupo1)
 
+print(seleccionadas7)
+
+todas7 = list(combinations(range(14), 7))
+grupo2_usados = set()
+
+for item_grupo1 in grupo1_usados:
+    if item_grupo1[0] in comb7:
+        grupo2 = set(combinations(comb7, 2))
+        grupo2_usados.update(grupo2)
+
+
+for comb7 in todas7:
+    grupo2 = set(combinations(comb7, 2))
+
+    if grupo2.isdisjoint(grupo2_usados):
+        seleccionadas7.append(comb7)
+        grupo2_usados.update(grupo2)
 print(seleccionadas7)

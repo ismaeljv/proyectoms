@@ -1,13 +1,14 @@
 import random
 from collections import defaultdict
-
+from collections import Counter
+from itertools import combinations
 # =========================================================
 # CONFIGURACIÓN
 # =========================================================
 
 NUM_APUESTAS = 32
 
-DISTANCIA_MIN = 4
+DISTANCIA_MIN = 5
 DISTANCIA_MAX = 7
 
 TOLERANCIA = 0
@@ -20,64 +21,29 @@ MAX_INTENTOS = 2000
 # APUESTA BASE
 # =========================================================
 
-#base= ['1','2','1','2','2','1','1','1','1','1','2','1','2','2']
-base = ['1','2','1','2','2','1','1','1','X','1','2','1','2','2']
-
+base= ['1','1','2','1','2','1','X','1','2','2','1','1','1','2']
 
 
 # =========================================================
 # RESTRICCIONES
 # =========================================================
 
-"""restricciones = [
-    {'1':22, 'X':5, '2':5},
-    {'1':8, 'X':8, '2':16},
-    {'1':21, 'X':6, '2':5},
-    {'1':9, 'X':10, '2':13},
-    {'1':8, 'X':8, '2':16},
-    {'1':18, 'X':8, '2':6},
-    {'1':22, 'X':5, '2':5},
-    {'1':18, 'X':7, '2':7},
-    {'1':11, 'X':11, '2':10},
-    {'1':17, 'X':8, '2':7},
-    {'1':9, 'X':8, '2':15},
-    {'1':22, 'X':6, '2':4},
-    {'1':7, 'X':7, '2':18},
-    {'1':10, 'X':8, '2':14},
-]
 
 restricciones = [
-    {'1':24, 'X':4, '2':4},
-    {'1':8, 'X':8, '2':16},
-    {'1':20, 'X':6, '2':6},
+    {'1':21, 'X':7, '2':4},
+    {'1':14, 'X':10, '2':8},
+    {'1':4, 'X':4, '2':24},
+    {'1':16, 'X':9, '2':7},
+    {'1':3, 'X':4, '2':25},
+    {'1':21, 'X':7, '2':4},
+    {'1':12, 'X':12, '2':8},
+    {'1':17, 'X':9, '2':6},
+    {'1':7, 'X':8, '2':17},
     {'1':9, 'X':10, '2':13},
-    {'1':8, 'X':8, '2':16},
-    {'1':17, 'X':8, '2':7},
-    {'1':23, 'X':5, '2':4},
-    {'1':18, 'X':7, '2':7},
-    {'1':11, 'X':11, '2':10},
-    {'1':17, 'X':8, '2':7},
-    {'1':8, 'X':8, '2':16},
+    {'1':16, 'X':9, '2':7},
     {'1':22, 'X':6, '2':4},
-    {'1':7, 'X':6, '2':19},
-    {'1':10, 'X':9, '2':13},
-]"""
-
-restricciones = [
-    {'1':23, 'X':5, '2':4},
-    {'1':8, 'X':8, '2':16},
-    {'1':21, 'X':6, '2':5},
-    {'1':9, 'X':10, '2':13},
-    {'1':8, 'X':8, '2':16},
-    {'1':18, 'X':8, '2':6},
-    {'1':22, 'X':6, '2':4},
-    {'1':18, 'X':7, '2':7},
-    {'1':11, 'X':12, '2':9},
-    {'1':18, 'X':8, '2':6},
-    {'1':8, 'X':8, '2':16},
-    {'1':22, 'X':6, '2':4},
-    {'1':7, 'X':6, '2':19},
-    {'1':9, 'X':9, '2':14},
+    {'1':14, 'X':10, '2':8},
+    {'1':11, 'X':9, '2':12},
 ]
 
 # =========================================================
@@ -223,6 +189,50 @@ def generar_candidata():
         apuesta[pos] = elegido
 
     return apuesta
+
+
+def analizar_repeticiones(elegidas):
+    resultados = {}
+
+    # Analizamos pares, tríos, cuartetos... hasta el tamaño de la combinación
+    for tamaño in range(2, 8):
+        contador = Counter()
+
+        for linea in elegidas:
+            # Convertimos la línea a conjunto/lista de enteros
+            if isinstance(linea, str):
+                numeros = list(map(int, linea.split()))
+            else:
+                numeros = list(linea)
+
+            # Generamos las combinaciones de ese tamaño
+            for grupo in combinations(numeros, tamaño):
+                contador[grupo] += 1
+
+        resultados[tamaño] = contador
+
+    return resultados
+
+def buscar_no_aparecidos(elegidas, tamaño):
+    # Todos los grupos posibles de ese tamaño entre 1 y 14
+    todos = set(combinations(range(1, 15), tamaño))
+
+    # Grupos que aparecen en las combinaciones elegidas
+    aparecidos = set()
+
+    for linea in elegidas:
+        if isinstance(linea, str):
+            numeros = list(map(int, linea.split()))
+        else:
+            numeros = list(linea)
+
+        for grupo in combinations(numeros, tamaño):
+            aparecidos.add(grupo)
+
+    # Los que nunca han aparecido
+    no_aparecidos = todos - aparecidos
+
+    return sorted(no_aparecidos)
 
 
 # =========================================================
@@ -464,4 +474,26 @@ for i in range(14):
         f"2={conteo['2']:2d}/"
         f"{restricciones[i]['2']:2d}"
     )
+exit(0)
+print("Analizando repeticiones en las posiciones elegidas...")
+resultados = analizar_repeticiones(historico_posiciones)
+print("Resultados del análisis de repeticiones en las posiciones:")
+for tamaño, contador in resultados.items():
+    print(f"Tamaño {tamaño}:")
+    for grupo, cantidad in contador.items():
+        print(f"  {grupo}: {cantidad} veces")
 
+pares_no_aparecidos = buscar_no_aparecidos(historico_posiciones, 2)
+
+print("Pares que no han aparecido:", len(pares_no_aparecidos))
+
+for par in pares_no_aparecidos:
+    print(par)
+
+
+trios_no_aparecidos = buscar_no_aparecidos(historico_posiciones, 3)
+
+print("Tríos que no han aparecido:", len(trios_no_aparecidos))
+
+for trio in trios_no_aparecidos:
+    print(trio)
